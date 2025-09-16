@@ -1,324 +1,464 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DrivePay | Hitung Angsuran Mobil</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-    
-    <!-- Konfigurasi Tailwind untuk Dark Mode -->
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        dark: {
-                            50: '#f8fafc',
-                            100: '#f1f5f9',
-                            200: '#e2e8f0',
-                            300: '#cbd5e1',
-                            400: '#94a3b8',
-                            500: '#64748b',
-                            600: '#475569',
-                            700: '#334155',
-                            800: '#1e293b',
-                            900: '#0f172a',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <!-- Custom CSS untuk Glassmorphism -->
+    <link rel="shortcut icon" href="icon.png" type="image/x-icon">
     <style>
-        .glass {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        :root {
+            --bs-body-bg: #0a0a0a; 
+            --bs-body-color: #e2e2e2; 
+            --bs-primary: #f5d547; 
+            --bs-primary-rgb: 245, 213, 71;
+            --bs-secondary: #a67c00; 
+            --bs-secondary-rgb: 166, 124, 0;
+            --bs-success: #28a745;
+            --bs-info: #17a2b8;
+            --bs-warning: #ffc107;
+            --bs-danger: #dc3545;
+            --bs-light: #f8f9fa;
+            --bs-dark: #343a40;
+            --bs-card-bg: #1a1a1a; 
+            --bs-card-border-color: #333; 
+            --bs-border-color: #333; 
+            --bs-form-control-bg: #222; 
+            --bs-form-control-border-color: #444; 
+            --bs-heading-color: #f5d547; 
         }
         
-        .dark .glass {
-            background: rgba(30, 41, 59, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        body {
+            background-color: var(--bs-body-bg);
+            color: var(--bs-body-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar {
+            background-color: #111111 !important;
+            border-bottom: 1px solid #333;
+        }
+        
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+        
+        .navbar-brand:hover, .nav-link:hover {
+            color: var(--bs-primary) !important;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            background-color: var(--bs-card-bg);
+            border-color: var(--bs-card-border-color);
+        }
+        
+        .card-title {
+            color: var(--bs-primary);
+            font-weight: 600;
+        }
+        
+        .text-primary {
+            color: var(--bs-primary) !important;
+        }
+        
+        .form-control {
+            background-color: var(--bs-form-control-bg);
+            border-color: var(--bs-form-control-border-color);
+            color: var(--bs-body-color);
+        }
+        
+        .form-control:focus {
+            background-color: var(--bs-form-control-bg);
+            border-color: var(--bs-primary);
+            box-shadow: 0 0 0 0.25rem rgba(245, 213, 71, 0.25);
+            color: var(--bs-body-color);
+        }
+        
+        .input-group-text {
+            background-color: #333;
+            border-color: #444;
+            color: var(--bs-body-color);
+        }
+        
+        .btn-primary {
+            background-color: var(--bs-primary);
+            border-color: var(--bs-primary);
+            color: #000;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e6c535;
+            border-color: #e6c535;
+            color: #000;
+        }
+        
+        .swiper {
+            width: 100%;
+            height: 400px;
+        }
+        
+        .swiper-slide img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .main-content {
+            padding-top: 80px;
+        }
+        
+        .footer {
+            background-color: #111111;
+            color: white;
+            border-top: 1px solid #333;
+        }
+        
+        .stats-card {
+            text-align: center;
+            padding: 15px;
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--bs-primary);
+            margin-bottom: 5px;
+        }
+        
+        .stats-label {
+            color: #a9a9a9;
+            font-size: 0.9rem;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .contact-icon {
+            color: var(--bs-primary);
+            margin-right: 15px;
+            font-size: 1.2rem;
+            width: 25px;
+            text-align: center;
+        }
+        
+        .social-icons a {
+            color: #a9a9a9;
+            margin-right: 15px;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+        
+        .social-icons a:hover {
+            color: var(--bs-primary);
+        }
+        
+        .location-placeholder {
+            background-color: #222;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+        
+        .location-icon {
+            color: var(--bs-primary);
+            font-size: 2.5rem;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .result-label {
+            color: #a9a9a9;
+        }
+        
+        .result-value {
+            font-weight: 600;
+        }
+        
+        .result-highlight {
+            font-weight: 700;
+            color: var(--bs-primary);
+            font-size: 1.1rem;
+        }
+        
+        .section-title {
+            font-weight: 600;
+            color: var(--bs-primary);
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--bs-primary);
+        }
+        
+        code {
+            background-color: #333;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--bs-body-color);
         }
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-dark-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
-    <!-- Header dengan Logo dan Navigasi -->
-    <header class="glass fixed top-0 left-0 right-0 z-50 transition-all duration-300">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <i class="fas fa-car text-blue-600 dark:text-blue-400 text-2xl"></i>
-                <span class="font-bold text-xl text-blue-800 dark:text-blue-400">DrivePay</span>
-            </div>
-            <div class="flex items-center space-x-6">
-                <nav>
-                    <ul class="flex space-x-6">
-                        <li><a href="#beranda" class="text-blue-600 dark:text-blue-400 font-medium hover:text-blue-800 dark:hover:text-blue-300 transition">Home</a></li>
-                        <li><a href="#tentang" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">About</a></li>
-                        <li><a href="#kontak" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Contact</a></li>
-                    </ul>
-                </nav>
-                <!-- Dark Mode Toggle -->
-                <button id="darkModeToggle" class="p-2 rounded-full bg-white/30 dark:bg-dark-700/50 text-gray-700 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-dark-700/70 transition-all duration-300 backdrop-blur-sm">
-                    <i class="fas fa-moon dark:hidden"></i>
-                    <i class="fas fa-sun hidden dark:inline"></i>
-                </button>
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <i class="fas fa-car me-2"></i>
+                <span>DrivePay</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#beranda">Beranda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#tentang">Tentang</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#kontak">Kontak</a>
+                    </li>
+                </ul>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 pt-24 pb-8">
-        <!-- Gambar Slider -->
-        <section id="beranda" class="mb-10 rounded-xl overflow-hidden shadow-lg dark:shadow-dark-900/30">
-            <!-- Swiper -->
-            <div class="swiper mySwiper h-64 md:h-80">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <img src="812.jpg" alt="Mobil Sport" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent flex items-center">
-                            <div class="text-white px-4 md:px-8">
-                                <h1 class="text-3xl md:text-4xl font-bold mb-2 pl-10">Mobil Impian Anda</h1>
-                                <p class="text-lg md:text-xl max-w-xl pl-10">Dapatkan mobil impian dengan cicilan terjangkau</p>
+    <main class="main-content">
+        <div class="container">
+            <section id="beranda" class="mb-5">
+                <div class="swiper mySwiper rounded-4 overflow-hidden">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="https://images.unsplash.com/photo-1554224712-d8560f709cbe?q=80&w=2070&auto=format&fit=crop" alt="Mobil Sport">
+                            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center" style="background: linear-gradient(to right, rgba(10,10,10,0.8), rgba(10,10,10,0.4));">
+                                <div class="text-white ps-4" style="margin-left: 2.5rem;">
+                                    <h1 class="display-5 fw-bold mb-2">Mobil Impian Anda</h1>
+                                    <p class="lead">Dapatkan mobil impian dengan cicilan terjangkau</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="https://images.unsplash.com/photo-1494905998402-395d579af36f?q=80&w=2070&auto=format&fit=crop" alt="Mobil Keluarga">
+                            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center" style="background: linear-gradient(to right, rgba(10,10,10,0.8), rgba(10,10,10,0.4));">
+                                <div class="text-white ps-4" style="margin-left: 2.5rem;">
+                                    <h1 class="display-5 fw-bold mb-2">Proses Cepat & Mudah</h1>
+                                    <p class="lead">Hitung cicilan mobil Anda dalam hitungan detik</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?q=80&w=2070&auto=format&fit=crop" alt="Mobil Mewah">
+                            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center" style="background: linear-gradient(to right, rgba(10,10,10,0.8), rgba(10,10,10,0.4));">
+                                <div class="text-white ps-4" style="margin-left: 2.5rem;">
+                                    <h1 class="display-5 fw-bold mb-2">Bunga Terjangkau</h1>
+                                    <p class="lead">Nikmati bunga kompetitif untuk kredit mobil Anda</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide">
-                        <img src="mc20.jpg" alt="Mobil Keluarga" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent flex items-center">
-                            <div class="text-white px-4 md:px-8">
-                                <h1 class="text-3xl md:text-4xl font-bold mb-2 pl-10">Proses Cepat & Mudah</h1>
-                                <p class="text-lg md:text-xl max-w-xl pl-10">Hitung cicilan mobil Anda dalam hitungan detik</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?q=80&w=2070&auto=format&fit=crop" alt="Mobil Mewah" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent flex items-center">
-                            <div class="text-white px-4 md:px-8">
-                                <h1 class="text-3xl md:text-4xl font-bold mb-2 pl-10">Bunga Terjangkau</h1>
-                                <p class="text-lg md:text-xl max-w-xl pl-10">Nikmati bunga kompetitif untuk kredit mobil Anda</p>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
                 </div>
-                <div class="swiper-pagination"></div>
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Aksi Perhitungan Kredit Mobil -->
-        <section class="bg-white dark:bg-dark-800 rounded-xl shadow-lg dark:shadow-dark-900/30 p-6 mb-10 transition-colors duration-300">
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Kalkulator Kredit Mobil</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Form Input -->
-                <div>
-                    <form id="creditForm" class="space-y-4">
-                        <div>
-                            <label for="carPrice" class="block text-gray-700 dark:text-gray-300 mb-2">Harga Mobil (Rp)</label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 dark:text-gray-400">Rp</span>
-                                <input type="number" id="carPrice" class="w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-dark-600 bg-white dark:bg-dark-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-gray-800 dark:text-white" placeholder="200000000" required>
-                            </div>
-                        </div>
+            <section class="mb-5">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h2 class="section-title">Kalkulator Kredit Mobil</h2>
                         
-                        <div>
-                            <label for="downPayment" class="block text-gray-700 dark:text-gray-300 mb-2">DP (%)</label>
-                            <div class="relative">
-                                <input type="number" id="downPayment" class="w-full pl-3 pr-8 py-2 border border-gray-300 dark:border-dark-600 bg-white dark:bg-dark-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-gray-800 dark:text-white" placeholder="20" min="0" max="100" required>
-                                <span class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 dark:text-gray-400">%</span>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <form id="creditForm">
+                                    <div class="mb-3">
+                                        <label for="carPrice" class="form-label">Harga Mobil (Rp)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">Rp</span>
+                                            <input type="number" class="form-control" id="carPrice" placeholder="200000000" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="downPayment" class="form-label">DP (%)</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="downPayment" placeholder="20" min="0" max="100" required>
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="loanPeriod" class="form-label">Tenor (Tahun)</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="loanPeriod" placeholder="5" min="1" required>
+                                            <span class="input-group-text">Tahun</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary w-100">Hitung Angsuran</button>
+                                </form>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div id="resultContainer" class="d-none">
+                                    <h3 class="mb-4">Hasil Perhitungan</h3>
+                                    <div class="result-item">
+                                        <span class="result-label">Harga Mobil:</span>
+                                        <span id="resultPrice" class="result-value">Rp 0</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">DP (20%):</span>
+                                        <span id="resultDP" class="result-value">Rp 0</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Bunga (20%):</span>
+                                        <span id="resultInterest" class="result-value">Rp 0</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Tenor:</span>
+                                        <span id="resultPeriod" class="result-value">0 bulan</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Angsuran per Bulan:</span>
+                                        <span id="resultInstallment" class="result-highlight">Rp 0</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        
-                        <div>
-                            <label for="loanPeriod" class="block text-gray-700 dark:text-gray-300 mb-2">Tenor (Tahun)</label>
-                            <div class="relative">
-                                <input type="number" id="loanPeriod" class="w-full pl-3 pr-16 py-2 border border-gray-300 dark:border-dark-600 bg-white dark:bg-dark-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-gray-800 dark:text-white" placeholder="5" min="1" required>
-                                <span class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 dark:text-gray-400">Tahun</span>
+                    </div>
+                </div>
+            </section>
+            <section id="tentang" class="mb-5">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h2 class="section-title">Tentang Perusahaan</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="mb-3">
+                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quod alias laboriosam sed dignissimos officia quas illum voluptas expedita! Sed sunt nisi libero nulla maxime. Placeat rem reiciendis impedit in? Facere voluptates aliquam beatae odio optio! Magni quod optio ipsam tenetur, sit itaque soluta nemo nostrum eum recusandae omnis odio, at et minima adipisci ratione, enim quaerat provident ipsa culpa in cumque. Explicabo at amet necessitatibus tenetur? Minima illo alias quae ad deserunt voluptates, quas pariatur quibusdam at sint ab rerum quidem eius animi aliquam in dolor esse debitis! Impedit unde dolor fugiat libero quos, tenetur soluta voluptatibus maxime sit repellat.
+                                </p>
+                                <p class="mb-4">
+                                    Dengan teknologi terkini dan tim profesional, kami berkomitmen untuk memberikan pengalaman 
+                                    terbaik dalam perencanaan keuangan pembelian mobil Anda.
+                                </p>
+                                <div class="row">
+                                    <div class="col-4 stats-card">
+                                        <div class="stats-number">8+</div>
+                                        <div class="stats-label">Tahun Pengalaman</div>
+                                    </div>
+                                    <div class="col-4 stats-card">
+                                        <div class="stats-number">10K+</div>
+                                        <div class="stats-label">Pelanggan Puas</div>
+                                    </div>
+                                    <div class="col-4 stats-card">
+                                        <div class="stats-number">15+</div>
+                                        <div class="stats-label">Mitra Dealer</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 d-flex align-items-center">
+                                <img src="salesman.jpg" alt="Kantor KreditMobil" class="img-fluid rounded">
                             </div>
                         </div>
-                        
-                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition duration-300">
-                            Hitung Angsuran
-                        </button>
-                    </form>
-                </div>
-                
-                <!-- Hasil Perhitungan -->
-                <div id="resultContainer" class="bg-gray-50 dark:bg-dark-700 rounded-lg p-6 hidden transition-colors duration-300">
-                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Hasil Perhitungan</h3>
-                    <div class="space-y-3">
-                        <div class="flex justify-between border-b border-gray-200 dark:border-dark-600 pb-2">
-                            <span class="text-gray-600 dark:text-gray-300">Harga Mobil:</span>
-                            <span id="resultPrice" class="font-medium text-gray-800 dark:text-white">Rp 0</span>
-                        </div>
-                        <div class="flex justify-between border-b border-gray-200 dark:border-dark-600 pb-2">
-                            <span class="text-gray-600 dark:text-gray-300">DP (20%):</span>
-                            <span id="resultDP" class="font-medium text-gray-800 dark:text-white">Rp 0</span>
-                        </div>
-                        <div class="flex justify-between border-b border-gray-200 dark:border-dark-600 pb-2">
-                            <span class="text-gray-600 dark:text-gray-300">Bunga (20%):</span>
-                            <span id="resultInterest" class="font-medium text-gray-800 dark:text-white">Rp 0</span>
-                        </div>
-                        <div class="flex justify-between border-b border-gray-200 dark:border-dark-600 pb-2">
-                            <span class="text-gray-600 dark:text-gray-300">Tenor:</span>
-                            <span id="resultPeriod" class="font-medium text-gray-800 dark:text-white">0 bulan</span>
-                        </div>
-                        <div class="flex justify-between pt-3">
-                            <span class="text-lg font-semibold text-gray-800 dark:text-white">Angsuran per Bulan:</span>
-                            <span id="resultInstallment" class="text-xl font-bold text-blue-600 dark:text-blue-400">Rp 0</span>
-                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <section id="tentang" class="bg-white dark:bg-dark-800 rounded-xl shadow-lg dark:shadow-dark-900/30 p-6 mb-10 transition-colors duration-300">
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">About Company</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                    <p class="text-gray-700 dark:text-gray-300 mb-4">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed architecto aliquam corporis dolorum. Labore itaque aut ut libero iure quo, nisi ullam distinctio consequuntur molestiae atque, commodi reprehenderit necessitatibus! Dolores, necessitatibus suscipit tenetur modi magni consectetur cumque, libero reiciendis exercitationem quas porro cum ea laborum vero officia, distinctio similique dignissimos consequatur! In repellat suscipit ex cumque officiis doloribus omnis qui fuga neque autem praesentium quibusdam dolorum sequi molestiae similique est saepe dolores officia ipsa aut, modi nihil laboriosam! Praesentium ab iure et quae totam omnis molestias minus fuga, aliquid magni error veniam tempora perspiciatis placeat, aspernatur natus dolore doloribus unde?
-                    </p>
-                    <p class="text-gray-700 dark:text-gray-300 mb-4">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas quibusdam dolores rerum corporis et, dolor recusandae sint tempore. Vero quibusdam libero nihil qui iure ad consequuntur, facere incidunt optio magnam sequi nobis eius officiis itaque sit. Debitis fugit odit facilis necessitatibus inventore molestias ratione quaerat. Veritatis eos repudiandae natus repellat.
-                    </p>
-                    <div class="flex items-center space-x-4 mt-6">
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">8+</div>
-                            <div class="text-gray-600 dark:text-gray-400">Tahun Pengalaman</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">10K+</div>
-                            <div class="text-gray-600 dark:text-gray-400">Pelanggan Puas</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">15+</div>
-                            <div class="text-gray-600 dark:text-gray-400">Mitra Dealer</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex justify-center items-center">
-                    <img src="salesman.jpg" alt="Kantor KreditMobil" class="rounded-lg shadow-md dark:shadow-dark-900/20 h-auto w-25">
-                </div>
-            </div>
-        </section>
-
-        <!-- Kontak Perusahaan -->
-        <section id="kontak" class="bg-white dark:bg-dark-800 rounded-xl shadow-lg dark:shadow-dark-900/30 p-6 mb-10 transition-colors duration-300">
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Kontak Perusahaan</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Hubungi Kami</h3>
-                    <div class="space-y-3">
-                        <div class="flex items-center">
-                            <i class="fas fa-map-marker-alt text-blue-600 dark:text-blue-400 w-6"></i>
-                            <span class="ml-3 text-gray-700 dark:text-gray-300">Jl. Sudirman No. 123, Jakarta Pusat</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-phone text-blue-600 dark:text-blue-400 w-6"></i>
-                            <span class="ml-3 text-gray-700 dark:text-gray-300">(021) 1234-5678</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-envelope text-blue-600 dark:text-blue-400 w-6"></i>
-                            <span class="ml-3 text-gray-700 dark:text-gray-300">info@drivepay.co.id</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-clock text-blue-600 dark:text-blue-400 w-6"></i>
-                            <span class="ml-3 text-gray-700 dark:text-gray-300">Senin - Jumat: 09.00 - 17.00 WIB</span>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-6">
-                        <h4 class="font-medium text-gray-800 dark:text-white mb-3">Ikuti Kami</h4>
-                        <div class="flex space-x-4">
-                            <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition">
-                                <i class="fab fa-facebook-f text-xl"></i>
-                            </a>
-                            <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition">
-                                <i class="fab fa-twitter text-xl"></i>
-                            </a>
-                            <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition">
-                                <i class="fab fa-instagram text-xl"></i>
-                            </a>
-                            <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition">
-                                <i class="fab fa-linkedin-in text-xl"></i>
-                            </a>
+            <section id="kontak" class="mb-5">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h2 class="section-title">Kontak Perusahaan</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3 class="h5 mb-4">Hubungi Kami</h3>
+                                
+                                <div class="contact-item">
+                                    <i class="fas fa-map-marker-alt contact-icon"></i>
+                                    <span>Jl. Sudirman No. 123, Jakarta Pusat</span>
+                                </div>
+                                
+                                <div class="contact-item">
+                                    <i class="fas fa-phone contact-icon"></i>
+                                    <span>(021) 1234-5678</span>
+                                </div>
+                                
+                                <div class="contact-item">
+                                    <i class="fas fa-envelope contact-icon"></i>
+                                    <span>info@kreditmobil.co.id</span>
+                                </div>
+                                
+                                <div class="contact-item">
+                                    <i class="fas fa-clock contact-icon"></i>
+                                    <span>Senin - Jumat: 09.00 - 17.00 WIB</span>
+                                </div>
+                                
+                                <h4 class="mb-3 mt-4">Ikuti Kami</h4>
+                                <div class="social-icons">
+                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="#"><i class="fab fa-twitter"></i></a>
+                                    <a href="#"><i class="fab fa-instagram"></i></a>
+                                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="location-placeholder">
+                                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.101688192471!2d106.7785796753433!3d-6.250329961199438!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f105419959a7%3A0x244b9406aa60a1fd!2sIvan&#39;s%20Motor!5e0!3m2!1sid!2sid!4v1757985539556!5m2!1sid!2sid" width="600" height="325" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div>
-                    <div class="bg-gray-100 dark:bg-dark-700 rounded-lg p-4 transition-colors duration-300">
-                        <h4 class="font-medium text-gray-800 dark:text-white mb-2">Lokasi Kami</h4>
-                        <div class="aspect-w-16 aspect-h-9 bg-gray-200 dark:bg-dark-600 rounded-lg flex items-center justify-center transition-colors duration-300">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.101688192471!2d106.7785796753433!3d-6.250329961199438!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f105419959a7%3A0x244b9406aa60a1fd!2sIvan&#39;s%20Motor!5e0!3m2!1sid!2sid!4v1757982076279!5m2!1sid!2sid" width="720" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+            </section>
+        </div>
     </main>
-    <!-- Footer -->
-    <footer class="bg-gray-800 dark:bg-dark-900 text-white py-8 transition-colors duration-300">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-4 md:mb-0">
-                    <div class="flex items-center space-x-2 mb-2">
-                        <i class="fas fa-car text-blue-400 text-xl"></i>
-                        <span class="font-bold text-lg">DrivePay</span>
+
+    <footer class="footer py-4 mt-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-car me-2" style="color: var(--bs-primary);"></i>
+                        <span class="fw-bold">DrivePay</span>
                     </div>
-                    <p class="text-gray-400 text-sm">© 2025 DrivePay. Hak cipta dilindungi.</p>
-                </div>
-                <div class="flex space-x-4">
-                    <a href="#" class="text-gray-400 hover:text-white transition">
-                        <i class="fab fa-facebook-f text-xl"></i>
-                    </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition">
-                        <i class="fab fa-twitter text-xl"></i>
-                    </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition">
-                        <i class="fab fa-instagram text-xl"></i>
-                    </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition">
-                        <i class="fab fa-linkedin-in text-xl"></i>
-                    </a>
+                    <p class="mb-0" style="color: #a9a9a9;">© 2025 DrivePay. Hak cipta dilindungi.</p>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     
     <script>
-        // Dark Mode Toggle
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        const htmlElement = document.documentElement;
-        
-        // Check for saved user preference, if any, on load
-        if (localStorage.getItem('darkMode') === 'true') {
-            htmlElement.classList.add('dark');
-        }
-        
-        darkModeToggle.addEventListener('click', function() {
-            htmlElement.classList.toggle('dark');
-            
-            // Save user preference in localStorage
-            localStorage.setItem('darkMode', htmlElement.classList.contains('dark'));
-        });
-        
-        // Inisialisasi Swiper
         const swiper = new Swiper('.mySwiper', {
             spaceBetween: 30,
             centeredSlides: true,
@@ -335,44 +475,37 @@
                 prevEl: '.swiper-button-prev',
             },
         });
-        
-        // Form handler
+
         document.getElementById('creditForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Mendapatkan nilai input
             const carPrice = parseFloat(document.getElementById('carPrice').value);
             const dpPercent = parseFloat(document.getElementById('downPayment').value);
             const loanYears = parseFloat(document.getElementById('loanPeriod').value);
             
             // Perhitungan
             const dpAmount = carPrice * (dpPercent / 100);
-            const interestAmount = carPrice * 0.2; // Bunga 20%
+            const interestAmount = carPrice * 0.2; 
             const loanMonths = loanYears * 12;
             const totalAmount = carPrice + interestAmount;
             const loanAmount = totalAmount - dpAmount;
             const monthlyInstallment = loanAmount / loanMonths;
             
-            // Format mata uang
             function formatCurrency(amount) {
                 return 'Rp ' + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,').replace('.00', '');
             }
             
-            // Menampilkan hasil
             document.getElementById('resultPrice').textContent = formatCurrency(carPrice);
             document.getElementById('resultDP').textContent = formatCurrency(dpAmount);
             document.getElementById('resultInterest').textContent = formatCurrency(interestAmount);
             document.getElementById('resultPeriod').textContent = loanMonths + ' bulan';
             document.getElementById('resultInstallment').textContent = formatCurrency(monthlyInstallment);
             
-            // Menampilkan container hasil
-            document.getElementById('resultContainer').classList.remove('hidden');
+            document.getElementById('resultContainer').classList.remove('d-none');
             
-            // Scroll ke hasil
             document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
         });
         
-        // Smooth scrolling untuk navigasi
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -387,5 +520,4 @@
         });
     </script>
 </body>
-
 </html>
