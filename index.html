@@ -519,28 +519,8 @@
             const persenDP = parseFloat(document.getElementById('downPayment').value);
             const jangkaWaktuTahun = parseFloat(document.getElementById('loanPeriod').value);
             
-            if (isNaN(hargaMobil) || isNaN(persenDP) || isNaN(jangkaWaktuTahun)) {
-                tampilkanNotifikasi('Harap isi semua field dengan angka yang valid');
-                return;
-            }
-            
-            if (hargaMobil <= 0) {
-                tampilkanNotifikasi('Harga mobil harus lebih dari 0');
-                return;
-            }
-            
-            if (persenDP < 0 || persenDP > 100) {
-                tampilkanNotifikasi('Persentase DP harus antara 0 dan 100');
-                return;
-            }
-            
-            if (jangkaWaktuTahun <= 0) {
-                tampilkanNotifikasi('Jangka waktu harus lebih dari 0 tahun');
-                return;
-            }
-            
             const jumlahDP = hargaMobil * (persenDP / 100);
-            const jumlahBunga = hargaMobil * 0.2; // Bunga 20%
+            const jumlahBunga = hargaMobil * 0.2; 
             const jangkaWaktuBulan = jangkaWaktuTahun * 12;
             const totalPembayaran = hargaMobil + jumlahBunga;
             const jumlahPinjaman = totalPembayaran - jumlahDP;
@@ -574,3 +554,4 @@
     </script>
 </body>
 </html>
+
